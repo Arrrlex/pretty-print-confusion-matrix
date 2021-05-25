@@ -13,12 +13,13 @@ REFerences:
 """
 
 #imports
-from pandas import DataFrame
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 from matplotlib.collections import QuadMesh
-import seaborn as sn
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
 
 
 def get_new_fig(fn, figsize=[9,9]):
@@ -153,7 +154,7 @@ def pretty_plot_confusion_matrix(df_cm, annot=True, cmap="Oranges", fmt='.2f', f
     fig, ax1 = get_new_fig('Conf matrix default', figsize)
 
     #thanks for seaborn
-    ax = sn.heatmap(df_cm, annot=annot, annot_kws={"size": fz}, linewidths=lw, ax=ax1,
+    ax = sns.heatmap(df_cm, annot=annot, annot_kws={"size": fz}, linewidths=lw, ax=ax1,
                     cbar=cbar, cmap=cmap, linecolor='w', fmt=fmt)
 
     #set ticklabels rotation
@@ -209,8 +210,6 @@ def plot_confusion_matrix_from_data(y_test, predictions, columns=None, annot=Tru
         plot confusion matrix function with y_test (actual values) and predictions (predic),
         whitout a confusion matrix yet
     """
-    from sklearn.metrics import confusion_matrix
-    from pandas import DataFrame
 
     #data
     if(not columns):
@@ -225,7 +224,7 @@ def plot_confusion_matrix_from_data(y_test, predictions, columns=None, annot=Tru
     fz = 11;
     figsize=[9,9];
     show_null_values = 2
-    df_cm = DataFrame(confm, index=columns, columns=columns)
+    df_cm = pd.DataFrame(confm, index=columns, columns=columns)
     pretty_plot_confusion_matrix(df_cm, fz=fz, cmap=cmap, figsize=figsize, show_null_values=show_null_values, pred_val_axis=pred_val_axis)
 #
 
@@ -243,7 +242,7 @@ def _test_cm():
                        [ 0, 40,  0,  1, 15,  0],
                        [ 0,  0,  0,  0,  0, 20]])
     #get pandas dataframe
-    df_cm = DataFrame(array, index=range(1,7), columns=range(1,7))
+    df_cm = pd.DataFrame(array, index=range(1,7), columns=range(1,7))
     #colormap: see this and choose your more dear
     cmap = 'PuRd'
     pretty_plot_confusion_matrix(df_cm, cmap=cmap)
@@ -252,7 +251,7 @@ def _test_cm():
 def _test_data_class():
     """ test function with y_test (actual values) and predictions (predic) """
     #data
-    y_test = np.array([1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5])
+    y_test = np.array([1,2,3,4,5] * 11)
     predic = np.array([1,2,4,3,5, 1,2,4,3,5, 1,2,3,4,4, 1,4,3,4,5, 1,2,4,4,5, 1,2,4,4,5, 1,2,4,4,5, 1,2,4,4,5, 1,2,3,3,5, 1,2,3,3,5, 1,2,3,4,4, 1,2,3,4,1, 1,2,3,4,1, 1,2,3,4,1, 1,2,4,4,5, 1,2,4,4,5, 1,2,4,4,5, 1,2,4,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5, 1,2,3,4,5])
     """
       Examples to validate output (confusion matrix plot)
@@ -288,4 +287,3 @@ if(__name__ == '__main__'):
     plt.pause(5)
     print('_test_data_class: test function with y_test (actual values) and predictions (predic)')
     _test_data_class()
-
